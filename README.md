@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌐 NexusLP - High-Performance Landing Page
 
-## Getting Started
+![NexusLP Banner](https://img.shields.with/badge/Nexus-Framework-22c55e?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 
-First, run the development server:
+A **NexusLP** é uma Landing Page de última geração desenvolvida para infraestruturas de dados e dashboards de alta performance. O foco do projeto é proporcionar uma experiência visual imersiva, utilizando efeitos de vidro (glassmorphism), animações fluidas e uma estética "Dark Tech".
 
-```bash
+## 🚀 Tecnologias Utilizadas
+
+Este projeto foi construído com as melhores tecnologias do ecossistema React:
+
+- **Next.js 15+**: Framework para React com foco em performance e SEO.
+- **TypeScript**: Tipagem estática para um código mais seguro e robusto.
+- **Tailwind CSS**: Estilização baseada em utilitários para design responsivo.
+- **Framer Motion**: Biblioteca poderosa para animações complexas e interativas.
+- **Lucide React**: Conjunto de ícones minimalistas e consistentes.
+
+## ✨ Funcionalidades
+
+- [x] **Hero Section Dinâmica**: Interface imersiva com visual de placa de circuito.
+- [x] **Gráficos em Tempo Real**: Visualização de métricas integrada com Recharts.
+- [x] **FAQ Interativo**: Sistema de acordeão com animações suaves.
+- [x] **Totalmente Responsivo**: Otimizado para dispositivos móveis, tablets e desktops.
+- [x] **Performance Web Vitals**: Foco em carregamento rápido e fluidez.
+
+## 🛠️ Como rodar o projeto localmente
+
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/fernandodiass/nexus-lp.git
+
+   
+2. **Entre na pasta do projeto:**
+
+Bash
+cd nexus-lp
+
+3. **Instale as dependências:**
+
+Bash
+npm install
+# ou
+yarn install
+
+4. **Inicie o servidor de desenvolvimento:**
+
+Bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. **Acesse no navegador:**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Abra http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+📁 Estrutura do Projeto
+Plaintext
+src/
+ ├── app/           # Rotas e layout principal
+ ├── components/    # Componentes reutilizáveis (Hero, Faq, Footer, etc.)
+ ├── styles/        # Configurações globais de CSS
+ └── assets/        # Imagens e arquivos estáticos
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Desenvolvido com ⚡ por Fernando Dias
