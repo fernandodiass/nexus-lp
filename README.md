@@ -32,19 +32,22 @@ Este projeto foi construído com as melhores tecnologias do ecossistema React:
    
 2. **Entre na pasta do projeto:**
 
-Bash
+Bash:
+
 cd nexus-lp
 
 3. **Instale as dependências:**
 
-Bash
+Bash:
+
 npm install
 ou
 yarn install
 
 4. **Inicie o servidor de desenvolvimento:**
 
-Bash
+Bash:
+
 npm run dev
 
 5. **Acesse no navegador:**
