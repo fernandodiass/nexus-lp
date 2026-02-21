@@ -1,6 +1,5 @@
 # 🌐 NexusLP - High-Performance Landing Page
 
-![NexusLP Banner](https://img.shields.with/badge/Nexus-Framework-22c55e?style=for-the-badge&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
@@ -30,23 +29,22 @@ Este projeto foi construído com as melhores tecnologias do ecossistema React:
 1. **Clone o repositório:**
    ```bash
    git clone https://github.com/fernandodiass/nexus-lp.git
-
    
 2. **Entre na pasta do projeto:**
 
-Bash
+   ```bash
 cd nexus-lp
 
 3. **Instale as dependências:**
 
-Bash
+   ```bash
 npm install
-# ou
+ou
 yarn install
 
 4. **Inicie o servidor de desenvolvimento:**
 
-Bash
+   ```bash
 npm run dev
 
 5. **Acesse no navegador:**
@@ -62,3 +60,5 @@ src/
  └── assets/        # Imagens e arquivos estáticos
 
 Desenvolvido com ⚡ por Fernando Dias
+
+[def]: https://img.shields.with/badge/Nexus-Framework-22c55e?style=for-the-badge&logo=next.js&logoColor=white
