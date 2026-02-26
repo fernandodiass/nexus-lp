@@ -63,5 +63,5 @@ src/
  ├── styles/        # Configurações globais de CSS
  └── assets/        # Imagens e arquivos estáticos
 
-
-**Desenvolvido por: Fernando Dias - 2026**
+```
+Desenvolvido por: Fernando Dias - 2026
