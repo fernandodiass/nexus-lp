@@ -63,6 +63,7 @@ src/
  ├── styles/        # Configurações globais de CSS
  └── assets/        # Imagens e arquivos estáticos
 
+bash
 
 Desenvolvido por: Fernando Dias - 2026
 
