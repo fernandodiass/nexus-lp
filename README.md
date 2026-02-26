@@ -54,6 +54,7 @@ npm run dev
 
 Abra http://localhost:3000
 
+```bash
 📁 Estrutura do Projeto
 Plaintext
 src/
@@ -61,6 +62,7 @@ src/
  ├── components/    # Componentes reutilizáveis (Hero, Faq, Footer, etc.)
  ├── styles/        # Configurações globais de CSS
  └── assets/        # Imagens e arquivos estáticos
+
 
 Desenvolvido por: Fernando Dias - 2026
 
