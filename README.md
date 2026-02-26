@@ -63,8 +63,5 @@ src/
  ├── styles/        # Configurações globais de CSS
  └── assets/        # Imagens e arquivos estáticos
 
-bash
 
-Desenvolvido por: Fernando Dias - 2026
-
-[def]: https://img.shields.with/badge/Nexus-Framework-22c55e?style=for-the-badge&logo=next.js&logoColor=white
+**Desenvolvido por: Fernando Dias - 2026**
