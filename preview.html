@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Nexus — Financial Intelligence Platform</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto} /* smooth handled via JS */
+:root{
+  --rose-light:#D1AAB2;--rose-med:#A9697B;--plum:#7A2D68;--indigo:#48408D;--midnight:#14045F;
+  --bg:#070312;--t1:#F5F2F7;--t2:#D9D3DF;--t3:#A7A0B0;
+  --gb:rgba(255,255,255,.03);--gb1:rgba(255,255,255,.07);--gb2:rgba(255,255,255,.12);
+  --nav-h:64px;
+}
+body{background:var(--bg);color:var(--t1);font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;outline:none;background:none}
+
+/* scroll-margin for fixed nav */
+#hero,#social,#features,#product,#pricing,#faq,#cta,#footer{scroll-margin-top:var(--nav-h)}
+
+/* ── NAV ── */
+#main-nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav-h);
+  display:flex;align-items:center;
+  transition:background .3s,border-color .3s,backdrop-filter .3s;
+}
+#main-nav.scrolled{
+  background:rgba(7,3,18,.9);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;letter-spacing:-.02em;cursor:pointer;flex-shrink:0}
+.logo-mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--plum),var(--indigo));display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(122,45,104,.5);flex-shrink:0}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-link{padding:6px 14px;border-radius:8px;font-size:14px;font-weight:500;color:var(--t3);background:transparent;transition:all .2s;cursor:pointer;white-space:nowrap}
+.nav-link:hover,.nav-link.active{color:var(--t1)}
+.nav-link.active{background:rgba(255,255,255,.06)}
+.nav-cta{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.btn-ghost{font-size:14px;color:var(--t3);padding:8px 14px;border-radius:8px;transition:color .2s;white-space:nowrap}
+.btn-ghost:hover{color:var(--t1)}
+.btn-pr{font-size:13px;font-weight:500;color:var(--t1);padding:8px 18px;border-radius:8px;background:linear-gradient(135deg,var(--plum),var(--indigo));border:1px solid rgba(209,170,178,.15);transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.btn-pr:hover{box-shadow:0 4px 24px rgba(122,45,104,.45);transform:translateY(-1px)}
+.hamburger{display:none;width:40px;height:40px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);align-items:center;justify-content:center;color:var(--t1);flex-shrink:0}
+
+/* ── MOBILE DRAWER ── */
+#mobile-drawer{
+  position:fixed;top:var(--nav-h);left:0;right:0;z-index:199;
+  background:rgba(7,3,18,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  max-height:0;overflow:hidden;
+  transition:max-height .35s ease,padding .3s ease;
+  padding:0 24px;
+}
+#mobile-drawer.open{max-height:520px;padding:16px 24px 28px}
+.drawer-link{display:flex;align-items:center;justify-content:space-between;width:100%;padding:14px 16px;border-radius:10px;font-size:16px;font-weight:500;color:var(--t3);transition:all .2s;margin-bottom:2px}
+.drawer-link:hover,.drawer-link.active{background:rgba(255,255,255,.05);color:var(--t1)}
+.drawer-link.active{background:rgba(122,45,104,.15)}
+.drawer-divider{height:1px;background:rgba(255,255,255,.06);margin:14px 0}
+.drawer-btn{display:block;width:100%;padding:13px;border-radius:10px;font-size:15px;font-weight:500;text-align:center;transition:all .2s;margin-bottom:10px}
+#overlay{position:fixed;inset:0;z-index:198;background:rgba(0,0,0,.45);display:none}
+#overlay.show{display:block}
+
+/* ── CANVAS BG ── */
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+
+/* ── HERO ── */
+#hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding-top:var(--nav-h)}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black,transparent);-webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black,transparent)}
+.spotlight{position:absolute;top:-5%;left:50%;transform:translateX(-50%);width:70vw;height:60vh;background:radial-gradient(ellipse,rgba(122,45,104,.18) 0%,rgba(72,64,141,.08) 40%,transparent 70%);pointer-events:none}
+.hero-content{position:relative;z-index:5;max-width:1200px;margin:0 auto;padding:80px 24px 0;display:flex;flex-direction:column;align-items:center}
+.badge-announce{display:inline-flex;align-items:center;gap:8px;padding:5px 14px 5px 8px;background:rgba(122,45,104,.12);border:1px solid rgba(122,45,104,.25);border-radius:100px;margin-bottom:32px;font-size:13px;color:var(--t2);cursor:default}
+.badge-new{display:inline-flex;align-items:center;padding:2px 8px;background:linear-gradient(135deg,var(--plum),var(--indigo));border-radius:100px;font-size:11px;font-weight:700;color:var(--t1);letter-spacing:.05em;text-transform:uppercase}
+h1{font-size:clamp(36px,7vw,76px);font-weight:700;letter-spacing:-.04em;line-height:1.06;text-align:center;max-width:900px;margin-bottom:24px}
+.grad-txt{background:linear-gradient(135deg,var(--rose-light) 0%,var(--rose-med) 50%,var(--plum) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(15px,2vw,19px);color:var(--t3);text-align:center;max-width:560px;line-height:1.65;margin-bottom:40px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:48px}
+.btn-hero-pr{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:linear-gradient(135deg,var(--plum),var(--indigo));border:1px solid rgba(209,170,178,.2);border-radius:10px;color:var(--t1);font-size:15px;font-weight:500;transition:all .2s}
+.btn-hero-pr:hover{box-shadow:0 8px 32px rgba(122,45,104,.55);transform:translateY(-2px)}
+.btn-hero-sc{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px;color:var(--t2);font-size:15px;font-weight:500;backdrop-filter:blur(12px);transition:all .2s}
+.btn-hero-sc:hover{border-color:rgba(255,255,255,.14);color:var(--t1);transform:translateY(-2px)}
+.trust-badges{display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;margin-bottom:56px;font-size:12px;color:var(--t3)}
+.trust-badges span{display:flex;align-items:center;gap:5px}
+
+/* dashboard preview */
+.dash-wrap{position:relative;width:100%;max-width:960px;margin-bottom:-100px}
+.dash-glow{position:absolute;bottom:20%;left:50%;transform:translateX(-50%);width:65%;height:180px;background:radial-gradient(ellipse,rgba(122,45,104,.3) 0%,rgba(72,64,141,.15) 50%,transparent 70%);filter:blur(40px)}
+.dash-card{position:relative;z-index:1;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.04)}
+.win-chrome{display:flex;align-items:center;gap:8px;padding:13px 20px;background:rgba(255,255,255,.02);border-bottom:1px solid rgba(255,255,255,.06)}
+.win-dots{display:flex;gap:6px}
+.win-dot{width:10px;height:10px;border-radius:50%}
+.addr-bar{display:flex;align-items:center;gap:6px;padding:4px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:6px;font-size:11px;color:var(--t3);margin:0 auto}
+.dash-body{padding:18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.stat-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:9px;padding:14px}
+.stat-label{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.stat-val{font-size:20px;font-weight:700;letter-spacing:-.025em;color:var(--t1);margin-bottom:3px}
+.chart-card{grid-column:span 2;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:9px;padding:14px}
+.alloc-card{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:9px;padding:14px}
+.card-mini-title{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.float-card{position:absolute;background:rgba(7,3,18,.85);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:13px 17px;backdrop-filter:blur(20px);box-shadow:0 16px 40px rgba(0,0,0,.4);z-index:10}
+.float-left{left:-88px;top:16%;animation:float 6s ease-in-out infinite}
+.float-right{right:-80px;top:38%;animation:float 6s ease-in-out infinite 2s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* ── SHARED SECTION ── */
+.section-inner{max-width:1200px;margin:0 auto;padding:0 24px}
+.section-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(122,45,104,.14);border:1px solid rgba(122,45,104,.28);border-radius:100px;font-size:12px;font-weight:500;color:var(--rose-light);letter-spacing:.02em;margin-bottom:18px}
+.section-h{font-size:clamp(26px,4vw,48px);font-weight:700;letter-spacing:-.035em;line-height:1.1;margin-bottom:14px}
+.section-sub{font-size:15px;color:var(--t3);max-width:520px;line-height:1.65}
+.divider-line{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent)}
+
+/* ── SOCIAL PROOF ── */
+#social{padding:100px 0 80px}
+.logo-strip{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;position:relative;margin-bottom:56px}
+.logo-fade-l,.logo-fade-r{position:absolute;top:0;bottom:0;width:100px;z-index:2;pointer-events:none}
+.logo-fade-l{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.logo-fade-r{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
+.logo-item{padding:14px 36px;font-size:14px;font-weight:600;color:var(--t3);opacity:.45;transition:opacity .2s;border-right:1px solid rgba(255,255,255,.05);white-space:nowrap;cursor:default}
+.logo-item:last-child{border-right:none}
+.logo-item:hover{opacity:1}
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden}
+.metric-cell{padding:36px 28px;background:var(--bg);position:relative;transition:background .3s}
+.metric-cell:hover{background:rgba(122,45,104,.05)}
+.metric-cell:not(:last-child)::after{content:'';position:absolute;right:0;top:20%;bottom:20%;width:1px;background:rgba(255,255,255,.05)}
+.metric-val{font-size:clamp(24px,3.5vw,40px);font-weight:700;letter-spacing:-.035em;margin-bottom:8px;background:linear-gradient(135deg,var(--t1),var(--rose-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.metric-lbl{font-size:13px;color:var(--t3)}
+
+/* ── FEATURES BENTO ── */
+#features{padding:120px 0}
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:52px}
+.bento-item{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:26px;position:relative;overflow:hidden;transition:all .3s;display:flex;flex-direction:column;text-align:left}
+.bento-item:hover{border-color:rgba(255,255,255,.11);transform:translateY(-2px);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.bento-wide{grid-column:span 2;min-height:340px}
+.bento-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;flex-shrink:0}
+.bento-h{font-size:15px;font-weight:600;color:var(--t1);margin-bottom:7px;letter-spacing:-.01em}
+.bento-p{font-size:13px;color:var(--t3);line-height:1.55}
+.bento-glow{position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;pointer-events:none;opacity:.5;transition:opacity .3s}
+.bento-item:hover .bento-glow{opacity:1}
+
+/* ── DASHBOARD PRODUCT ── */
+#product{padding:120px 0}
+.two-col{display:grid;grid-template-columns:1fr 1.35fr;gap:72px;align-items:center}
+.check-list{display:flex;flex-direction:column;gap:12px;margin:24px 0}
+.check-item{display:flex;align-items:flex-start;gap:10px}
+.check-dot{width:22px;height:22px;border-radius:6px;background:rgba(122,45,104,.15);border:1px solid rgba(122,45,104,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.check-txt{font-size:13px;color:var(--t2);line-height:1.5}
+.two-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:32px}
+.btn-sm-pr{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;background:linear-gradient(135deg,var(--plum),var(--indigo));border:1px solid rgba(209,170,178,.14);border-radius:8px;color:var(--t1);font-size:13px;font-weight:500;transition:all .2s;cursor:pointer}
+.btn-sm-pr:hover{box-shadow:0 5px 20px rgba(122,45,104,.4);transform:translateY(-1px)}
+.btn-sm-sc{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;border:1px solid rgba(255,255,255,.08);border-radius:8px;color:var(--t3);font-size:13px;font-weight:500;transition:all .2s;cursor:pointer}
+.btn-sm-sc:hover{color:var(--t1);border-color:rgba(255,255,255,.13)}
+.prod-frame{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;box-shadow:0 32px 70px rgba(0,0,0,.5)}
+.tab-bar{display:flex;align-items:center;gap:0;padding:0 16px;background:rgba(255,255,255,.02);border-bottom:1px solid rgba(255,255,255,.06);overflow-x:auto}
+.tab-btn{padding:13px 15px;font-size:12px;font-weight:500;color:var(--t3);border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.tab-btn.active{color:var(--t1);border-bottom-color:var(--plum)}
+.live-badge{display:flex;align-items:center;gap:5px;font-size:11px;color:#4ade80;margin-left:auto;padding-left:12px;flex-shrink:0}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,.6)}
+.prod-body{padding:18px}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.mini-stat{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);border-radius:8px;padding:11px 13px}
+.ms-l{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.ms-v{font-size:17px;font-weight:700;color:var(--t1);letter-spacing:-.025em}
+.ms-s{font-size:10px}
+
+/* ── PRICING ── */
+#pricing{padding:120px 0}
+.price-toggle{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:28px;font-size:14px;flex-wrap:wrap}
+.toggle-track{width:46px;height:24px;border-radius:100px;background:linear-gradient(135deg,var(--plum),var(--indigo));border:1px solid rgba(255,255,255,.1);cursor:pointer;position:relative;flex-shrink:0}
+.toggle-thumb{position:absolute;top:3px;left:25px;width:16px;height:16px;border-radius:50%;background:var(--t1);transition:left .2s}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:52px;align-items:start}
+.price-card{border-radius:14px;padding:26px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);transition:all .3s;position:relative;overflow:hidden}
+.price-card:hover{border-color:rgba(255,255,255,.11);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.price-card.rec{background:rgba(122,45,104,.07);border-color:rgba(122,45,104,.28);transform:scale(1.02);box-shadow:0 0 60px rgba(122,45,104,.1)}
+.price-top-line{position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(209,170,178,.4),transparent)}
+.plan-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;background:linear-gradient(135deg,rgba(122,45,104,.28),rgba(72,64,141,.28));border:1px solid rgba(122,45,104,.3);border-radius:100px;font-size:11px;font-weight:600;color:var(--rose-light);letter-spacing:.02em;margin-bottom:16px}
+.plan-name{font-size:17px;font-weight:600;color:var(--t1);margin-bottom:7px}
+.plan-desc{font-size:12px;color:var(--t3);line-height:1.5;min-height:34px}
+.plan-price{display:flex;align-items:flex-end;gap:3px;margin:18px 0}
+.price-dollar{font-size:13px;color:var(--t3);margin-bottom:10px}
+.price-num{font-size:44px;font-weight:700;letter-spacing:-.04em;line-height:1;color:var(--t1)}
+.price-per{font-size:13px;color:var(--t3);margin-bottom:10px}
+.plan-cta{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 18px;border-radius:8px;font-size:13px;font-weight:500;transition:all .2s;margin-bottom:20px;cursor:pointer;width:100%}
+.cta-pr{background:linear-gradient(135deg,var(--plum),var(--indigo));border:1px solid rgba(209,170,178,.15);color:var(--t1)}
+.cta-pr:hover{box-shadow:0 5px 20px rgba(122,45,104,.4)}
+.cta-sc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--t2)}
+.cta-sc:hover{color:var(--t1);border-color:rgba(255,255,255,.13)}
+.plan-divider{height:1px;background:rgba(255,255,255,.06);margin-bottom:18px}
+.feat-list{display:flex;flex-direction:column;gap:10px}
+.feat-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--t2);line-height:1.4}
+.feat-check{width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center}
+
+/* ── FAQ ── */
+#faq{padding:120px 0}
+.faq-layout{display:grid;grid-template-columns:1fr 2fr;gap:72px;align-items:start}
+.faq-sticky{position:sticky;top:88px}
+.accord-item{border-bottom:1px solid rgba(255,255,255,.06)}
+.accord-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:22px 0;background:none;border:none;cursor:pointer;text-align:left}
+.accord-q{font-size:15px;font-weight:500;color:var(--t2);line-height:1.4;transition:color .2s}
+.accord-q.open{color:var(--t1)}
+.accord-icon{width:26px;height:26px;border-radius:7px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.accord-icon.open{background:rgba(122,45,104,.18);border-color:rgba(122,45,104,.3)}
+.accord-body{overflow:hidden;max-height:0;opacity:0;transition:max-height .35s ease,opacity .25s ease}
+.accord-body.open{max-height:240px;opacity:1}
+.accord-ans{padding-bottom:22px;font-size:13px;color:var(--t3);line-height:1.7;max-width:560px}
+
+/* ── CTA BAND ── */
+#cta{padding:80px 0 120px}
+.cta-card{position:relative;border-radius:22px;overflow:hidden;padding:72px 40px;background:rgba(122,45,104,.06);border:1px solid rgba(122,45,104,.2);text-align:center}
+.cta-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(122,45,104,.2) 0%,transparent 55%),radial-gradient(ellipse at 70% 50%,rgba(72,64,141,.14) 0%,transparent 55%);pointer-events:none}
+.cta-top-line{position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(209,170,178,.4),transparent)}
+.cta-btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:32px 0 16px}
+
+/* ── FOOTER ── */
+#footer{border-top:1px solid rgba(255,255,255,.06);padding-top:72px}
+.footer-top{display:grid;grid-template-columns:1fr 1fr;gap:72px;padding-bottom:52px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:52px}
+.footer-brand-txt{font-size:13px;color:var(--t3);line-height:1.65;max-width:320px;margin:14px 0 20px}
+.social-links{display:flex;gap:8px}
+.social-btn{width:32px;height:32px;border-radius:7px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:var(--t3);transition:all .2s;cursor:pointer}
+.social-btn:hover{color:var(--t1);background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.11)}
+.newsletter-h{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:6px}
+.newsletter-sub{font-size:12px;color:var(--t3);margin-bottom:16px;line-height:1.5}
+.email-row{display:flex}
+.email-inp{flex:1;min-width:0;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-right:none;border-radius:8px 0 0 8px;color:var(--t1);font-size:13px;font-family:inherit}
+.email-inp:focus{outline:none;border-color:rgba(122,45,104,.4)}
+.email-btn{padding:10px 18px;background:linear-gradient(135deg,var(--plum),var(--indigo));border:1px solid rgba(209,170,178,.14);border-radius:0 8px 8px 0;color:var(--t1);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .2s}
+.email-btn:hover{box-shadow:0 4px 16px rgba(122,45,104,.4)}
+.footer-links{display:grid;grid-template-columns:repeat(4,1fr);gap:36px;margin-bottom:48px}
+.footer-col-h{font-size:11px;font-weight:600;color:var(--t1);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
+.footer-col a{display:block;font-size:12px;color:var(--t3);margin-bottom:10px;transition:color .2s}
+.footer-col a:hover{color:var(--t2)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid rgba(255,255,255,.05);flex-wrap:wrap;gap:12px}
+.footer-copy{font-size:12px;color:var(--t3)}
+.footer-legal{display:flex;gap:18px}
+.footer-legal a{font-size:12px;color:var(--t3);transition:color .2s}
+.footer-legal a:hover{color:var(--t2)}
+.status-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.15);border-radius:6px}
+.status-dot{width:6px;height:6px;border-radius:50%;background:#4ade80}
+.status-txt{font-size:11px;color:#4ade80}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .bento{grid-template-columns:1fr 1fr}
+  .bento-wide{grid-column:span 2}
+  .two-col{grid-template-columns:1fr;gap:52px}
+  .price-grid{grid-template-columns:1fr;max-width:480px;margin-left:auto;margin-right:auto}
+  .price-card.rec{transform:none}
+  .metrics-grid{grid-template-columns:1fr 1fr}
+  .metric-cell:nth-child(2)::after{display:none}
+  .footer-top{grid-template-columns:1fr;gap:44px}
+  .footer-links{grid-template-columns:1fr 1fr;gap:28px}
+  .faq-layout{grid-template-columns:1fr;gap:44px}
+  .faq-sticky{position:static}
+  .float-left,.float-right{display:none!important}
+}
+@media(max-width:768px){
+  #features,#product,#pricing,#faq{padding:80px 0}
+  #social{padding:72px 0 60px}
+  #cta{padding:60px 0 80px}
+  #footer{padding-top:52px}
+  .hero-content{padding:60px 20px 0}
+  .trust-badges{gap:14px;font-size:11px}
+  .nav-links{display:none!important}
+  .nav-cta{display:none!important}
+  .hamburger{display:flex!important}
+  .dash-body{grid-template-columns:1fr 1fr}
+  .chart-card{grid-column:span 2}
+  .alloc-card{grid-column:span 2}
+  .stat-row{grid-template-columns:1fr 1fr;gap:8px}
+  .stat-row .mini-stat:last-child{grid-column:span 2}
+  .tab-btn{padding:12px 11px;font-size:11px}
+  .cta-card{padding:48px 24px}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:14px}
+  h1{font-size:clamp(32px,8vw,56px)}
+  .section-h{font-size:clamp(24px,5vw,38px)}
+}
+@media(max-width:480px){
+  .metrics-grid{grid-template-columns:1fr}
+  .metric-cell::after{display:none!important}
+  .metric-cell{border-bottom:1px solid rgba(255,255,255,.05)}
+  .footer-links{grid-template-columns:1fr}
+  .bento{grid-template-columns:1fr}
+  .bento-wide{grid-column:span 1}
+  .price-grid{max-width:100%}
+  .hero-btns a{width:100%;justify-content:center}
+  .cta-btns a{width:100%;justify-content:center}
+  .dash-body{grid-template-columns:1fr}
+  .chart-card,.alloc-card{grid-column:span 1}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════ NAV ══════ -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <div class="logo" onclick="navTo('hero')">
+      <div class="logo-mark">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1.5L14 5V10.5L7.5 14L1 10.5V5L7.5 1.5Z" stroke="#F5F2F7" stroke-width="1.4" stroke-linejoin="round"/><path d="M7.5 5.5L10.5 7V10L7.5 11.5L4.5 10V7L7.5 5.5Z" fill="#D1AAB2" fill-opacity=".75"/></svg>
+      </div>
+      Nexus
+    </div>
+    <div class="nav-links">
+      <button class="nav-link" data-target="hero"     onclick="navTo('hero')">Início</button>
+      <button class="nav-link" data-target="features" onclick="navTo('features')">Features</button>
+      <button class="nav-link" data-target="product"  onclick="navTo('product')">Produto</button>
+      <button class="nav-link" data-target="pricing"  onclick="navTo('pricing')">Pricing</button>
+      <button class="nav-link" data-target="faq"      onclick="navTo('faq')">FAQ</button>
+      <button class="nav-link" data-target="footer"   onclick="navTo('footer')">Contato</button>
+    </div>
+    <div class="nav-cta">
+      <button class="btn-ghost" onclick="navTo('footer')">Sign in</button>
+      <button class="btn-pr"    onclick="navTo('pricing')">
+        Get started
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5H9M6.5 3L9 5.5L6.5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <svg id="ham-open" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5H15M3 9H15M3 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <svg id="ham-close" width="18" height="18" viewBox="0 0 18 18" fill="none" style="display:none"><path d="M4 4L14 14M14 4L4 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ══════ MOBILE DRAWER ══════ -->
+<div id="mobile-drawer">
+  <button class="drawer-link" data-target="hero"     onclick="navTo('hero')">    Início   <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 6.5H10M7.5 4L10 6.5L7.5 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="drawer-link" data-target="features" onclick="navTo('features')">Features <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 6.5H10M7.5 4L10 6.5L7.5 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="drawer-link" data-target="product"  onclick="navTo('product')"> Produto  <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 6.5H10M7.5 4L10 6.5L7.5 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="drawer-link" data-target="pricing"  onclick="navTo('pricing')"> Pricing  <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 6.5H10M7.5 4L10 6.5L7.5 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="drawer-link" data-target="faq"      onclick="navTo('faq')">     FAQ      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 6.5H10M7.5 4L10 6.5L7.5 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="drawer-link" data-target="footer"   onclick="navTo('footer')">  Contato  <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 6.5H10M7.5 4L10 6.5L7.5 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <div class="drawer-divider"></div>
+  <button class="drawer-btn" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--t2)" onclick="navTo('footer')">Sign in</button>
+  <button class="drawer-btn" style="background:linear-gradient(135deg,#7A2D68,#48408D);border:1px solid rgba(209,170,178,.15);color:var(--t1);font-weight:600" onclick="navTo('pricing')">Get started →</button>
+</div>
+<div id="overlay" onclick="closeMenu()"></div>
+
+<!-- ══════ HERO ══════ -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <div class="spotlight"></div>
+  <div class="hero-content">
+    <div class="badge-announce"><span class="badge-new">New</span>Introducing Nexus AI Engine — 10× faster insights <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6H9.5M7 3.5L9.5 6L7 8.5" stroke="#A9697B" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h1>Financial intelligence<br><span class="grad-txt">built for scale.</span></h1>
+    <p class="hero-sub">Nexus unifies your entire financial stack — real-time data, predictive analytics, and automated workflows — into a single command center.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-hero-pr" onclick="navTo('pricing');return false">Start for free <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5H11M7.5 3L11 6.5L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a href="#" class="btn-hero-sc" onclick="navTo('product');return false"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 5L9.5 7L5.5 9V5Z" fill="currentColor"/></svg>Watch demo</a>
+    </div>
+    <div class="trust-badges">
+      <span>🔒 SOC 2 Type II</span><span>⚡ 99.99% uptime</span><span>🌍 GDPR compliant</span><span>🛡️ Bank-grade security</span>
+    </div>
+    <div class="dash-wrap">
+      <div class="dash-glow"></div>
+      <div class="dash-card">
+        <div class="win-chrome">
+          <div class="win-dots"><div class="win-dot" style="background:#ff5f57;opacity:.7"></div><div class="win-dot" style="background:#ffbd2e;opacity:.7"></div><div class="win-dot" style="background:#28ca41;opacity:.7"></div></div>
+          <div class="addr-bar"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1L9 3V7L5 9L1 7V3L5 1Z" stroke="currentColor" stroke-width="1"/></svg>app.nexus.finance/dashboard</div>
+        </div>
+        <div class="dash-body">
+          <div class="stat-card"><div class="stat-label">Total AUM</div><div class="stat-val">$2.84B</div><div style="font-size:11px;color:#4ade80">+12.4%</div></div>
+          <div class="stat-card"><div class="stat-label">Portfolios</div><div class="stat-val">1,284</div><div style="font-size:11px;color:#4ade80">+89 this week</div></div>
+          <div class="stat-card"><div class="stat-label">Avg. Return</div><div class="stat-val">18.7%</div><div style="font-size:11px;color:#f87171">-0.3% vs bmk</div></div>
+          <div class="chart-card"><div class="card-mini-title">Portfolio Performance — 8M Rolling</div><canvas id="hero-chart" height="70"></canvas></div>
+          <div class="alloc-card"><div class="card-mini-title">Allocation</div><div id="alloc-bars"></div></div>
+        </div>
+      </div>
+      <div class="float-card float-left">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,rgba(122,45,104,.3),rgba(72,64,141,.3));display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L2 8M7 12V5M12 12V2" stroke="#D1AAB2" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div><div style="font-size:13px;font-weight:600;color:#F5F2F7">+$142.8K</div><div style="font-size:10px;color:#A7A0B0">Revenue this month</div></div>
+        </div>
+      </div>
+      <div class="float-card float-right">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px rgba(74,222,128,.6)"></div><span style="font-size:12px;color:#D9D3DF">AI Engine active</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ SOCIAL PROOF ══════ -->
+<section id="social">
+  <div class="section-inner" style="padding-top:120px">
+    <p style="text-align:center;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:28px">Trusted by the world's leading financial institutions</p>
+    <div class="logo-strip">
+      <div class="logo-fade-l"></div><div class="logo-fade-r"></div>
+      <div class="logo-item">BlackRock</div><div class="logo-item">Sequoia Capital</div><div class="logo-item">Andreessen</div><div class="logo-item">Goldman Sachs</div><div class="logo-item">JPMorgan</div><div class="logo-item">Citadel</div>
+    </div>
+    <div class="divider-line" style="margin-bottom:52px"></div>
+    <div class="metrics-grid">
+      <div class="metric-cell"><div class="metric-val">$2.4T</div><div class="metric-lbl">Assets under management</div></div>
+      <div class="metric-cell"><div class="metric-val">99.99%</div><div class="metric-lbl">Uptime SLA</div></div>
+      <div class="metric-cell"><div class="metric-val">12ms</div><div class="metric-lbl">Average API latency</div></div>
+      <div class="metric-cell"><div class="metric-val">4,200+</div><div class="metric-lbl">Enterprise clients</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ FEATURES ══════ -->
+<section id="features">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-badge">✦ Platform capabilities</div>
+    <h2 class="section-h">Everything your team needs.<br><span class="grad-txt">Nothing you don't.</span></h2>
+    <p class="section-sub" style="margin:0 auto">From real-time market intelligence to automated compliance, Nexus handles complexity so your team focuses on alpha.</p>
+    <div class="bento">
+      <div class="bento-item bento-wide">
+        <div class="bento-glow" style="background:radial-gradient(circle,rgba(122,45,104,.25) 0%,transparent 70%)"></div>
+        <div class="bento-icon" style="background:rgba(122,45,104,.2);border:1px solid rgba(122,45,104,.3)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L3 5.5V12.5L9 16L15 12.5V5.5L9 2Z" stroke="#D1AAB2" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 7L11.5 8.25V11L9 12.5L6.5 11V8.25L9 7Z" fill="#D1AAB2" fill-opacity=".5"/></svg></div>
+        <div class="bento-h">AI-Powered Analytics Engine</div>
+        <p class="bento-p">Nexus's proprietary models process 50B+ data points daily, surfacing insights before the market moves. Prediction accuracy: 94.7%.</p>
+        <div style="flex:1;margin-top:20px"><canvas id="bento-chart"></canvas></div>
+      </div>
+      <div class="bento-item">
+        <div class="bento-glow" style="background:radial-gradient(circle,rgba(72,64,141,.25) 0%,transparent 70%)"></div>
+        <div class="bento-icon" style="background:rgba(72,64,141,.2);border:1px solid rgba(72,64,141,.3)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14L3 10M9 14V7M15 14V3" stroke="#D1AAB2" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="bento-h">Real-time Data Feeds</div>
+        <p class="bento-p">Sub-ms market data from 200+ global exchanges, normalized and ready.</p>
+        <div style="margin-top:14px"><canvas id="sparkline-chart" height="36"></canvas><div style="font-size:11px;color:#4ade80;margin-top:4px">↑ Live — 12ms latency</div></div>
+      </div>
+      <div class="bento-item">
+        <div class="bento-glow" style="background:radial-gradient(circle,rgba(169,105,123,.2) 0%,transparent 70%)"></div>
+        <div class="bento-icon" style="background:rgba(169,105,123,.15);border:1px solid rgba(169,105,123,.25)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="5" height="5" rx="1.5" stroke="#D1AAB2" stroke-width="1.5"/><rect x="11" y="2" width="5" height="5" rx="1.5" stroke="#D1AAB2" stroke-width="1.5"/><rect x="2" y="11" width="5" height="5" rx="1.5" stroke="#D1AAB2" stroke-width="1.5"/><rect x="11" y="11" width="5" height="5" rx="1.5" stroke="#D1AAB2" stroke-width="1.5"/><path d="M7 4.5H11M4.5 7V11M13.5 7V11M7 13.5H11" stroke="#D1AAB2" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <div class="bento-h">Workflow Automation</div>
+        <p class="bento-p">Build complex multi-step workflows with a visual editor. No code required.</p>
+      </div>
+      <div class="bento-item">
+        <div class="bento-icon" style="background:rgba(72,64,141,.15);border:1px solid rgba(72,64,141,.25)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L14 4.5V10C14 13 11.5 15.5 9 16.5C6.5 15.5 4 13 4 10V4.5L9 2Z" stroke="#D1AAB2" stroke-width="1.5" stroke-linejoin="round"/><path d="M6.5 9L8.5 11L11.5 7" stroke="#D1AAB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="bento-h">Automated Compliance</div>
+        <p class="bento-p">Stay audit-ready with one-click reporting for SEC, MiFID II, and FINRA.</p>
+      </div>
+      <div class="bento-item">
+        <div class="bento-icon" style="background:rgba(122,45,104,.15);border:1px solid rgba(122,45,104,.25)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 5L2 9L6 13" stroke="#D1AAB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 5L16 9L12 13" stroke="#D1AAB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 4L8 14" stroke="#D1AAB2" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="bento-h">Developer-First API</div>
+        <p class="bento-p">REST & GraphQL APIs with SDKs in 12 languages. Full sandbox environment.</p>
+      </div>
+      <div class="bento-item">
+        <div class="bento-icon" style="background:rgba(169,105,123,.15);border:1px solid rgba(169,105,123,.25)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="2" width="12" height="14" rx="2" stroke="#D1AAB2" stroke-width="1.5"/><path d="M6 6H12M6 9H12M6 12H9" stroke="#D1AAB2" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="bento-h">Institutional Reports</div>
+        <p class="bento-p">White-label PDF, Excel, or CRM-integrated reports for your clients.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ PRODUCT DASHBOARD ══════ -->
+<section id="product">
+  <div class="section-inner">
+    <div class="two-col">
+      <div>
+        <div class="section-badge" style="display:inline-flex;margin-bottom:20px">⬡ Command Center</div>
+        <h2 class="section-h" style="text-align:left">One dashboard.<br><span class="grad-txt">Complete clarity.</span></h2>
+        <p style="font-size:15px;color:var(--t3);line-height:1.65;margin-top:12px">Stop switching between Bloomberg terminals, spreadsheets, and legacy tools. Nexus centralizes your entire investment operation.</p>
+        <div class="check-list">
+          <div class="check-item"><div class="check-dot"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M2 4.5L4 6.5L7 3" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-txt">Real-time P&L across all portfolios and sub-accounts</div></div>
+          <div class="check-item"><div class="check-dot"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M2 4.5L4 6.5L7 3" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-txt">Risk exposure heatmaps with VaR calculations</div></div>
+          <div class="check-item"><div class="check-dot"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M2 4.5L4 6.5L7 3" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-txt">Automated rebalancing triggers and execution</div></div>
+          <div class="check-item"><div class="check-dot"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M2 4.5L4 6.5L7 3" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-txt">Integrated communication timeline per position</div></div>
+        </div>
+        <div class="two-btns">
+          <button class="btn-sm-pr" onclick="navTo('footer')">Request a demo</button>
+          <button class="btn-sm-sc" onclick="navTo('features')">View documentation →</button>
+        </div>
+      </div>
+      <div style="position:relative">
+        <div style="position:absolute;inset:-30px;background:radial-gradient(ellipse at 50% 60%,rgba(122,45,104,.12) 0%,transparent 70%);pointer-events:none"></div>
+        <div class="prod-frame" style="position:relative;z-index:1">
+          <div class="tab-bar">
+            <button class="tab-btn active">Overview</button>
+            <button class="tab-btn">Analytics</button>
+            <button class="tab-btn">Risk</button>
+            <button class="tab-btn">Compliance</button>
+            <div class="live-badge"><div class="live-dot"></div>Live</div>
+          </div>
+          <div class="prod-body">
+            <div class="stat-row">
+              <div class="mini-stat"><div class="ms-l">Total AUM</div><div class="ms-v">$3.04B</div><div class="ms-s" style="color:#4ade80">+$142M today</div></div>
+              <div class="mini-stat"><div class="ms-l">Net P&L</div><div class="ms-v">+$84.2M</div><div class="ms-s" style="color:#4ade80">YTD</div></div>
+              <div class="mini-stat"><div class="ms-l">Sharpe</div><div class="ms-v">1.84</div><div class="ms-s" style="color:var(--rose-light)">vs 1.20</div></div>
+            </div>
+            <canvas id="prod-chart" height="90"></canvas>
+            <div id="prod-table" style="margin-top:12px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ PRICING ══════ -->
+<section id="pricing">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-badge">Transparent pricing</div>
+    <h2 class="section-h" style="margin-top:16px">Invest in your infrastructure.</h2>
+    <p class="section-sub" style="margin:0 auto">No surprise fees. No seat-based pricing. One plan that scales with your AUM.</p>
+    <div class="price-toggle">
+      <span id="monthly-lbl" style="color:var(--t3)">Monthly</span>
+      <div class="toggle-track" onclick="toggleBilling()"><div class="toggle-thumb" id="toggle-thumb"></div></div>
+      <span id="annual-lbl">Annual</span>
+      <span id="save-badge" style="font-size:11px;color:#4ade80;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:100px;padding:2px 8px">Save 20%</span>
+    </div>
+    <div class="price-grid">
+      <div class="price-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-desc">For emerging funds and boutique RIAs getting started with data-driven investing.</div>
+        <div class="plan-price"><span class="price-dollar">$</span><span class="price-num" id="p-starter">299</span><span class="price-per">/mo</span></div>
+        <button class="plan-cta cta-sc">Start free trial →</button>
+        <div class="plan-divider"></div>
+        <div class="feat-list">
+          <div class="feat-item"><div class="feat-check" style="background:rgba(255,255,255,.06)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round"/></svg></div>Up to 5 portfolios</div>
+          <div class="feat-item"><div class="feat-check" style="background:rgba(255,255,255,.06)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round"/></svg></div>10 data sources</div>
+          <div class="feat-item"><div class="feat-check" style="background:rgba(255,255,255,.06)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round"/></svg></div>Standard analytics suite</div>
+          <div class="feat-item"><div class="feat-check" style="background:rgba(255,255,255,.06)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round"/></svg></div>API access (10K calls/mo)</div>
+        </div>
+      </div>
+      <div class="price-card rec">
+        <div class="price-top-line"></div>
+        <div class="plan-badge">✦ Most popular</div>
+        <div class="plan-name">Professional</div>
+        <div class="plan-desc">The full Nexus platform for established funds managing institutional capital.</div>
+        <div class="plan-price"><span class="price-dollar">$</span><span class="price-num" id="p-pro">999</span><span class="price-per">/mo</span></div>
+        <button class="plan-cta cta-pr">Start free trial →</button>
+        <div class="plan-divider"></div>
+        <div class="feat-list">
+          <div class="feat-item"><div class="feat-check" style="background:rgba(122,45,104,.2)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round"/></svg></div>Unlimited portfolios</div>
+          <div class="feat-item"><div class="feat-check" style="background:rgba(122,45,104,.2)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round"/></svg></div>200+ data sources</div>
+          <div class="feat-item"><div class="feat-check" style="background:rgba(122,45,104,.2)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round"/></svg></div>AI Analytics Engine</div>
+          <div class="feat-item"><div class="feat-check" style="background:rgba(122,45,104,.2)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round"/></svg></div>Priority support + CSM</div>
+          <div class="feat-item"><div class="feat-check" style="background:rgba(122,45,104,.2)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round"/></svg></div>White-label reports</div>
+        </div>
+      </div>
+      <div class="price-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-desc">Dedicated infrastructure and custom integrations for the world's largest institutions.</div>
+        <div class="plan-price"><span class="price-num" style="font-size:36px">Custom</span></div>
+        <button class="plan-cta cta-sc">Contact sales →</button>
+        <div class="plan-divider"></div>
+        <div class="feat-list">
+          <div class="feat-item"><div class="feat-check" style="background:rgba(255,255,255,.06)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round"/></svg></div>Everything in Professional</div>
+          <div class="feat-item"><div class="feat-check" style="background:rgba(255,255,255,.06)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round"/></svg></div>Dedicated cloud infra</div>
+          <div class="feat-item"><div class="feat-check" style="background:rgba(255,255,255,.06)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round"/></svg></div>On-premise deployment</div>
+          <div class="feat-item"><div class="feat-check" style="background:rgba(255,255,255,.06)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#D1AAB2" stroke-width="1.3" stroke-linecap="round"/></svg></div>Dedicated support team</div>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:32px;font-size:12px;color:var(--t3)">All plans include a 14-day free trial. No credit card required.</p>
+  </div>
+</section>
+
+<!-- ══════ FAQ ══════ -->
+<section id="faq">
+  <div class="section-inner">
+    <div class="faq-layout">
+      <div class="faq-sticky">
+        <div class="section-badge" style="display:inline-flex;margin-bottom:18px">FAQ</div>
+        <h2 class="section-h" style="text-align:left">Everything you<br><span class="grad-txt">need to know.</span></h2>
+        <p style="font-size:13px;color:var(--t3);line-height:1.6;margin:14px 0 24px">Can't find the answer? Our team is happy to help.</p>
+        <button class="btn-sm-sc" onclick="navTo('footer')">Contact support →</button>
+      </div>
+      <div id="faq-list"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ CTA BAND ══════ -->
+<section id="cta">
+  <div class="section-inner">
+    <div class="cta-card">
+      <div class="cta-bg"></div>
+      <div class="cta-top-line"></div>
+      <div style="position:relative;z-index:1">
+        <div class="section-badge" style="display:inline-flex;margin-bottom:20px">Start today — free for 14 days</div>
+        <h2 style="font-size:clamp(26px,5vw,54px);font-weight:700;letter-spacing:-.035em;line-height:1.1;margin-bottom:16px">The future of wealth management<br><span class="grad-txt">starts with better data.</span></h2>
+        <p style="font-size:16px;color:var(--t3);max-width:500px;margin:0 auto;line-height:1.6">Join 4,200+ financial institutions managing over $2.4 trillion with Nexus.</p>
+        <div class="cta-btns">
+          <a href="#" class="btn-hero-pr" onclick="navTo('pricing');return false">Get started for free <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5H11M7.5 3L11 6.5L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a href="#" class="btn-hero-sc" onclick="navTo('footer');return false">Talk to sales</a>
+        </div>
+        <p style="font-size:12px;color:var(--t3)">No credit card required · SOC 2 Type II · Cancel anytime</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ FOOTER ══════ -->
+<footer id="footer">
+  <div class="section-inner">
+    <div class="footer-top">
+      <div>
+        <div class="logo" onclick="navTo('hero')" style="cursor:pointer">
+          <div class="logo-mark"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 4.5V11.5L8 15L1 11.5V4.5L8 1Z" stroke="#F5F2F7" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 5.5L11 7V10L8 11.5L5 10V7L8 5.5Z" fill="#D1AAB2" fill-opacity=".7"/></svg></div>
+          Nexus
+        </div>
+        <p class="footer-brand-txt">The institutional-grade financial intelligence platform trusted by the world's leading asset managers, family offices, and hedge funds.</p>
+        <div class="social-links">
+          <div class="social-btn"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 3L10 10M10 3L3 10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <div class="social-btn"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M3 9V11M3 5V5.1M6 11V7C6 5.3 7.3 4 9 4C10.7 4 12 5.3 12 7V11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="social-btn"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 2C4 2 2 4 2 6.5C2 8.5 3.3 10.2 5.1 10.8V9.2C4.4 8.8 4 8 4 7.2C4 5.7 5.1 4.5 6.5 4.5C7.9 4.5 9 5.7 9 7.2V11C10.7 10.4 12 8.6 12 6.5C12 4 10 2 6.5 2Z" stroke="currentColor" stroke-width="1.3"/></svg></div>
+        </div>
+      </div>
+      <div>
+        <h4 class="newsletter-h">Stay ahead of the market</h4>
+        <p class="newsletter-sub">Weekly insights on institutional investing and product updates. No spam.</p>
+        <div class="email-row">
+          <input type="email" placeholder="your@fund.com" class="email-inp"/>
+          <button class="email-btn">Subscribe</button>
+        </div>
+        <p style="font-size:11px;color:var(--t3);margin-top:8px">Unsubscribe at any time.</p>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col"><div class="footer-col-h">Product</div><a href="#">Features</a><a href="#">Pricing</a><a href="#">Changelog</a><a href="#">Roadmap</a><a href="#">API Docs</a></div>
+      <div class="footer-col"><div class="footer-col-h">Company</div><a href="#">About</a><a href="#">Blog</a><a href="#">Careers</a><a href="#">Press</a><a href="#">Contact</a></div>
+      <div class="footer-col"><div class="footer-col-h">Legal</div><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Security</a><a href="#">Compliance</a><a href="#">GDPR</a></div>
+      <div class="footer-col"><div class="footer-col-h">Resources</div><a href="#">Documentation</a><a href="#">Community</a><a href="#">Integrations</a><a href="#">Status</a><a href="#">Support</a></div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Nexus Financial Technologies, Inc. All rights reserved.</p>
+      <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div>
+      <div class="status-pill"><div class="status-dot"></div><span class="status-txt">All systems operational</span></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─────────────────────────────────────────
+// NAVIGATION — único ponto de verdade
+// ─────────────────────────────────────────
+const NAV_H = 64;
+
+function navTo(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const y = el.getBoundingClientRect().top + window.scrollY - NAV_H;
+  window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+  closeMenu();
+}
+
+// scroll spy
+const NAV_IDS = ['hero','social','features','product','pricing','faq','cta','footer'];
+function updateSpy() {
+  let current = NAV_IDS[0];
+  NAV_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.getBoundingClientRect().top <= NAV_H + 40) current = id;
+  });
+  document.querySelectorAll('.nav-link').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.target === current);
+  });
+  document.querySelectorAll('.drawer-link').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.target === current);
+  });
+}
+
+window.addEventListener('scroll', () => {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 20);
+  updateSpy();
+}, { passive: true });
+
+// ─────────────────────────────────────────
+// MOBILE MENU
+// ─────────────────────────────────────────
+function toggleMenu() {
+  const open = !document.getElementById('mobile-drawer').classList.contains('open');
+  open ? openMenu() : closeMenu();
+}
+function openMenu() {
+  document.getElementById('mobile-drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('ham-open').style.display  = 'none';
+  document.getElementById('ham-close').style.display = 'block';
+}
+function closeMenu() {
+  document.getElementById('mobile-drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('ham-open').style.display  = 'block';
+  document.getElementById('ham-close').style.display = 'none';
+}
+window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
+
+// ─────────────────────────────────────────
+// CANVAS ANIMATED BG
+// ─────────────────────────────────────────
+(function(){
+  const c = document.getElementById('hero-canvas');
+  const ctx = c.getContext('2d');
+  let w, h, t = 0;
+  function resize(){ w = c.width = window.innerWidth; h = c.height = 900; }
+  resize(); window.addEventListener('resize', resize);
+  const pts = Array.from({length:55}, () => ({
+    x: Math.random()*window.innerWidth, y: Math.random()*900,
+    vx: (Math.random()-.5)*.25, vy: (Math.random()-.5)*.25,
+    r: Math.random()*1.4+.4, o: Math.random()*.32+.08
+  }));
+  let aid;
+  function draw(){
+    ctx.clearRect(0,0,w,h); t += .004;
+    [[w*.3+Math.sin(t)*60, h*.4, 380,'rgba(122,45,104,.1)'],
+     [w*.72+Math.cos(t*.8)*80, h*.5, 320,'rgba(72,64,141,.08)'],
+     [w*.5, h*.18+Math.sin(t*1.2)*40, 260,'rgba(209,170,178,.05)']
+    ].forEach(([x,y,r,col]) => {
+      const g = ctx.createRadialGradient(x,y,0,x,y,r);
+      g.addColorStop(0,col); g.addColorStop(1,'transparent');
+      ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+    });
+    pts.forEach(p => {
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=w; if(p.x>w)p.x=0; if(p.y<0)p.y=h; if(p.y>h)p.y=0;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(209,170,178,${p.o})`; ctx.fill();
+    });
+    aid = requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ─────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// ─────────────────────────────────────────
+// BILLING TOGGLE
+// ─────────────────────────────────────────
+let annual = true;
+function toggleBilling(){
+  annual = !annual;
+  document.getElementById('toggle-thumb').style.left = annual ? '25px' : '3px';
+  document.getElementById('annual-lbl').style.color  = annual ? '#F5F2F7' : '#A7A0B0';
+  document.getElementById('monthly-lbl').style.color = annual ? '#A7A0B0' : '#F5F2F7';
+  document.getElementById('save-badge').style.display = annual ? 'inline' : 'none';
+  document.getElementById('p-starter').textContent = annual ? '239' : '299';
+  document.getElementById('p-pro').textContent     = annual ? '799' : '999';
+}
+
+// ─────────────────────────────────────────
+// FAQ ACCORDION
+// ─────────────────────────────────────────
+(function(){
+  const faqs = [
+    {q:'How does Nexus connect to my existing systems?', a:'Nexus offers native integrations with 200+ platforms including Bloomberg, Refinitiv, Advent, Black Diamond, and all major custodians. Our REST and GraphQL APIs allow custom integrations, and our engineering team provides dedicated onboarding support to ensure a seamless migration with zero downtime.'},
+    {q:'What level of security does Nexus provide?', a:'We\'re SOC 2 Type II certified and GDPR compliant. All data is encrypted at rest (AES-256) and in transit (TLS 1.3). We maintain 99.99% uptime SLA with a globally distributed, multi-region infrastructure. Systems undergo quarterly penetration testing.'},
+    {q:'Can I migrate data from my current portfolio management system?', a:'Yes. Our migration team handles the entire process end-to-end, including data validation and reconciliation. We support imports from all major PMS platforms. Most migrations are completed within 2–4 weeks with no disruption to operations.'},
+    {q:'How does the AI Analytics Engine work?', a:'Our proprietary AI models are trained on 15+ years of market data and continuously updated with live feeds. The engine processes signals across multiple timeframes, asset classes, and geographies to surface actionable insights with full explainability.'},
+    {q:'What regulatory jurisdictions does Nexus support?', a:'Nexus supports regulatory reporting for US (SEC, FINRA, CFTC), EU (MiFID II, EMIR, AIFMD), UK (FCA), and select APAC jurisdictions. Our compliance team monitors regulatory changes globally and updates the platform proactively.'},
+    {q:'Is there a trial period available?', a:'All Starter and Professional plans include a 14-day free trial with full access to every feature. No credit card required. For Enterprise, we offer a structured proof-of-concept engagement against your actual data.'},
+    {q:'How is pricing determined for Enterprise plans?', a:'Enterprise pricing is based on AUM tiers, number of portfolios, data source requirements, and deployment model (cloud, hybrid, or on-premise). Most contracts are structured annually with volume discounts.'},
+  ];
+  let openIdx = 0;
+  function render(){
+    document.getElementById('faq-list').innerHTML = faqs.map((f,i) => `
+      <div class="accord-item">
+        <button class="accord-btn" onclick="toggleFAQ(${i})">
+          <span class="accord-q ${i===openIdx?'open':''}">${f.q}</span>
+          <div class="accord-icon ${i===openIdx?'open':''}">
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none"
+              style="transform:${i===openIdx?'rotate(45deg)':'rotate(0)'};transition:transform .25s;color:${i===openIdx?'#D1AAB2':'#A7A0B0'}">
+              <path d="M5.5 2V9M2 5.5H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </button>
+        <div class="accord-body ${i===openIdx?'open':''}">
+          <div class="accord-ans">${f.a}</div>
+        </div>
+      </div>`).join('');
+  }
+  window.toggleFAQ = i => { openIdx = openIdx===i ? null : i; render(); };
+  render();
+})();
+
+// ─────────────────────────────────────────
+// CHARTS
+// ─────────────────────────────────────────
+function drawLineChart(canvasId, vals, strokeColor, fillColor, dotColor, height){
+  const c = document.getElementById(canvasId); if(!c) return;
+  const ctx = c.getContext('2d');
+  const rect = c.parentElement.getBoundingClientRect();
+  c.width = rect.width || 400; c.height = height || 80;
+  const w=c.width, h=c.height, mx=Math.max(...vals), mn=Math.min(...vals)-2;
+  const sy = v => h-12-((v-mn)/(mx-mn))*(h-18);
+  const sx = i => 4+(i/(vals.length-1))*(w-8);
+  const path = new Path2D();
+  vals.forEach((v,i) => i===0 ? path.moveTo(sx(i),sy(v)) : path.lineTo(sx(i),sy(v)));
+  const area = new Path2D(path);
+  area.lineTo(sx(vals.length-1),h); area.lineTo(sx(0),h); area.closePath();
+  if(fillColor){
+    const g = ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0, fillColor.replace(')',',0.3)').replace('rgb','rgba'));
+    g.addColorStop(1, fillColor.replace(')',',0)').replace('rgb','rgba'));
+    ctx.fillStyle = g; ctx.fill(area);
+  }
+  ctx.strokeStyle = strokeColor; ctx.lineWidth=1.6; ctx.lineJoin='round'; ctx.lineCap='round'; ctx.stroke(path);
+  vals.forEach((v,i) => {
+    ctx.beginPath(); ctx.arc(sx(i),sy(v),2.5,0,Math.PI*2);
+    ctx.fillStyle = i===vals.length-1 ? (dotColor||strokeColor) : strokeColor+'99';
+    ctx.fill();
+  });
+}
+
+// Hero chart
+drawLineChart('hero-chart', [40,55,45,65,58,72,68,82,75,90,85,95], '#A9697B', 'rgb(122,45,104)', '#D1AAB2', 70);
+
+// Alloc bars
+(function(){
+  const wrap = document.getElementById('alloc-bars'); if(!wrap) return;
+  [['Equities',45,'#7A2D68'],['Fixed Income',28,'#48408D'],['Alternatives',17,'#A9697B'],['Cash',10,'#D1AAB2']].forEach(([l,p,c]) => {
+    wrap.innerHTML += `<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px">
+      <div style="width:7px;height:7px;border-radius:50%;background:${c};flex-shrink:0"></div>
+      <div style="flex:1;font-size:10px;color:#D9D3DF">${l}</div>
+      <div style="font-size:10px;color:#A7A0B0">${p}%</div>
+      <div style="width:44px;height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden">
+        <div style="width:${p}%;height:100%;background:${c};border-radius:2px"></div>
+      </div></div>`;
+  });
+})();
+
+// Bento chart
+(function(){
+  const wrap = document.getElementById('bento-chart'); if(!wrap) return;
+  const c = wrap; c.height = 110;
+  const rect = c.parentElement.getBoundingClientRect(); c.width = rect.width||400;
+  const vals=[20,35,28,48,42,58,52,68,63,75,70,82,78,90];
+  const ctx=c.getContext('2d');
+  const w=c.width,h=110,mx=Math.max(...vals),mn=Math.min(...vals)-2;
+  const sy=v=>h-12-((v-mn)/(mx-mn))*(h-18);
+  const sx=i=>4+(i/(vals.length-1))*(w-8);
+  const path=new Path2D(); vals.forEach((v,i)=>i===0?path.moveTo(sx(i),sy(v)):path.lineTo(sx(i),sy(v)));
+  const area=new Path2D(path); area.lineTo(sx(vals.length-1),h); area.lineTo(sx(0),h); area.closePath();
+  const g=ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,'rgba(122,45,104,.3)'); g.addColorStop(1,'rgba(122,45,104,0)');
+  ctx.fillStyle=g; ctx.fill(area);
+  ctx.strokeStyle='#A9697B'; ctx.lineWidth=1.8; ctx.lineJoin='round'; ctx.lineCap='round'; ctx.stroke(path);
+  vals.forEach((v,i)=>{ ctx.beginPath(); ctx.arc(sx(i),sy(v),2,0,Math.PI*2); ctx.fillStyle=i===vals.length-1?'#D1AAB2':'#7A2D68'; ctx.fill(); });
+})();
+
+// Sparkline
+drawLineChart('sparkline-chart', [30,45,38,55,48,62,58,70,65,78], '#4ade80', null, '#4ade80', 36);
+
+// Product chart
+(function(){
+  const c = document.getElementById('prod-chart'); if(!c) return;
+  const ctx = c.getContext('2d');
+  const rect = c.parentElement.getBoundingClientRect(); c.width=rect.width||400;
+  const months=['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb'];
+  const vals=[42,58,51,67,62,75,71,88];
+  const w=c.width, h=90, mx=Math.max(...vals), mn=Math.min(...vals)-4;
+  const sy=v=>h-16-((v-mn)/(mx-mn))*(h-22);
+  const sx=i=>20+(i/(vals.length-1))*(w-40);
+  const path=new Path2D(); vals.forEach((v,i)=>i===0?path.moveTo(sx(i),sy(v)):path.lineTo(sx(i),sy(v)));
+  const area=new Path2D(path); area.lineTo(sx(vals.length-1),h-16); area.lineTo(sx(0),h-16); area.closePath();
+  const g=ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,'rgba(122,45,104,.25)'); g.addColorStop(1,'rgba(122,45,104,0)');
+  ctx.fillStyle=g; ctx.fill(area);
+  ctx.strokeStyle='#A9697B'; ctx.lineWidth=1.5; ctx.lineJoin='round'; ctx.stroke(path);
+  months.forEach((m,i)=>{ ctx.fillStyle='#A7A0B0'; ctx.font='9px Inter,sans-serif'; ctx.textAlign='center'; ctx.fillText(m,sx(i),h); });
+})();
+
+// Product table
+(function(){
+  const t = document.getElementById('prod-table'); if(!t) return;
+  const rows=[['Global Macro','$840M','+18.4%',true,'Med'],['Long/Short','$620M','+12.1%',true,'High'],['Fixed Income','$1.2B','+4.8%',true,'Low'],['EM','$380M','-2.3%',false,'High']];
+  let html = `<div style="display:grid;grid-template-columns:1fr 70px 70px 50px;gap:6px;padding:5px 10px;border-bottom:1px solid rgba(255,255,255,.05)">
+    ${['Portfolio','AUM','Return','Risk'].map(h=>`<div style="font-size:9px;color:#A7A0B0;text-transform:uppercase;letter-spacing:.07em">${h}</div>`).join('')}</div>`;
+  rows.forEach(([n,a,r,up,risk]) => {
+    const rc=risk==='Low'?'#4ade80':risk==='High'?'#f87171':'#fbbf24';
+    const rb=risk==='Low'?'rgba(74,222,128,.1)':risk==='High'?'rgba(248,113,113,.1)':'rgba(251,191,36,.1)';
+    html+=`<div style="display:grid;grid-template-columns:1fr 70px 70px 50px;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.03)">
+      <div style="font-size:12px;color:#D9D3DF">${n}</div>
+      <div style="font-size:12px;color:#F5F2F7;font-weight:500">${a}</div>
+      <div style="font-size:12px;color:${up?'#4ade80':'#f87171'};font-weight:500">${r}</div>
+      <div style="font-size:10px;color:${rc};background:${rb};border-radius:3px;padding:2px 5px;display:inline-flex;align-items:center">${risk}</div>
+    </div>`;
+  });
+  t.innerHTML = html;
+})();
+
+// Initial spy run
+updateSpy();
+</script>
+</body>
+</html>

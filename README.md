@@ -1,67 +1,71 @@
-# 🌐 NexusLP - High-Performance Landing Page
+# Nexus — Financial Intelligence Landing Page
 
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+Landing page SaaS premium desenvolvida com Next.js 15, TypeScript e Tailwind CSS.
 
-A **NexusLP** é uma Landing Page de última geração desenvolvida para infraestruturas de dados e dashboards de alta performance. O foco do projeto é proporcionar uma experiência visual imersiva, utilizando efeitos de vidro (glassmorphism), animações fluidas e uma estética "Dark Tech".
+## Stack
 
-## 🚀 Tecnologias Utilizadas
+- **Next.js 15** (App Router)
+- **React 19**
+- **TypeScript**
+- **Tailwind CSS v3**
+- **Canvas API** (animated hero background)
 
-Este projeto foi construído com as melhores tecnologias do ecossistema React:
+## Design System
 
-- **Next.js 15+**: Framework para React com foco em performance e SEO.
-- **TypeScript**: Tipagem estática para um código mais seguro e robusto.
-- **Tailwind CSS**: Estilização baseada em utilitários para design responsivo.
-- **Framer Motion**: Biblioteca poderosa para animações complexas e interativas.
-- **Lucide React**: Conjunto de ícones minimalistas e consistentes.
+### Paleta de Cores
+| Token | Hex | Uso |
+|-------|-----|-----|
+| `--bg` | `#070312` | Background base |
+| `--midnight` | `#14045F` | Gradiente escuro |
+| `--indigo` | `#48408D` | Gradiente médio |
+| `--plum` | `#7A2D68` | Acento principal |
+| `--rose-medium` | `#A9697B` | Acento secundário |
+| `--rose-light` | `#D1AAB2` | Destaque / texto |
 
-## ✨ Funcionalidades
+### Tipografia
+- Família: `Inter` (system fallback)
+- Texto primário: `#F5F2F7`
+- Texto secundário: `#D9D3DF`
+- Texto muted: `#A7A0B0`
 
-- [x] **Hero Section Dinâmica**: Interface imersiva com visual de placa de circuito.
-- [x] **Gráficos em Tempo Real**: Visualização de métricas integrada com Recharts.
-- [x] **FAQ Interativo**: Sistema de acordeão com animações suaves.
-- [x] **Totalmente Responsivo**: Otimizado para dispositivos móveis, tablets e desktops.
-- [x] **Performance Web Vitals**: Foco em carregamento rápido e fluidez.
-
-## 🛠️ Como rodar o projeto localmente
-
-1. **Clone o repositório:**
-   ```bash
-   git clone https://github.com/fernandodiass/nexus-lp.git
-   
-2. **Entre na pasta do projeto:**
-
-Bash:
-
-cd nexus-lp
-
-3. **Instale as dependências:**
-
-Bash:
-
-npm install
-ou
-yarn install
-
-4. **Inicie o servidor de desenvolvimento:**
-
-Bash:
-
-npm run dev
-
-5. **Acesse no navegador:**
-
-Abra http://localhost:3000
-
-```bash
-📁 Estrutura do Projeto
-Plaintext
-src/
- ├── app/           # Rotas e layout principal
- ├── components/    # Componentes reutilizáveis (Hero, Faq, Footer, etc.)
- ├── styles/        # Configurações globais de CSS
- └── assets/        # Imagens e arquivos estáticos
+## Estrutura
 
 ```
-Desenvolvido por: Fernando Dias - 2026
+src/
+├── app/
+│   ├── layout.tsx       # Root layout + metadata
+│   ├── page.tsx         # Página principal (assembly)
+│   └── globals.css      # CSS global + tokens + animações
+├── components/
+│   ├── Navbar.tsx       # Sticky nav com glassmorphism
+│   ├── Hero.tsx         # Hero animado + canvas BG + dashboard
+│   ├── SocialProof.tsx  # Logo strip + métricas
+│   ├── Features.tsx     # Bento Grid de features
+│   ├── ApiDashboard.tsx # Product showcase com tabs
+│   ├── Pricing.tsx      # Pricing cards + toggle anual/mensal
+│   ├── Faq.tsx          # Accordion elegante
+│   ├── CTASection.tsx   # CTA final
+│   └── Footer.tsx       # Footer corporativo
+├── lib/
+│   └── utils.ts         # cn(), formatCurrency(), formatNumber()
+└── types/
+    └── index.ts         # Types + design tokens
+```
+
+## Instalação
+
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+npm start
+```
+
+## Preview standalone (sem Node)
+
+Abra `preview.html` diretamente no browser — contém a landing completa em arquivo único.

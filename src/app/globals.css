@@ -1,43 +1,78 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  --color-neon-green: #22c55e;
-  --color-cyber-purple: #a855f7;
-  --color-dark-bg: #050505;
+@layer base {
+  :root {
+    --nav-h: 64px;
+  }
+
+  html { scroll-behavior: auto; -webkit-font-smoothing: antialiased; }
+
+  body {
+    @apply bg-base text-t1 overflow-x-hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { @apply bg-base; }
+  ::-webkit-scrollbar-thumb { @apply bg-indigo rounded-full; }
+
+  /* Section scroll offset for fixed nav */
+  #hero, #social, #features, #product, #pricing, #faq, #cta, #footer {
+    scroll-margin-top: var(--nav-h);
+  }
 }
 
-html {
-  scroll-behavior: smooth;
+@layer components {
+  /* Glass card */
+  .glass {
+    @apply bg-white/[0.025] border border-white/[0.07] backdrop-blur-xl;
+  }
+  .glass-hover {
+    @apply hover:border-white/[0.12] hover:bg-white/[0.04] transition-all duration-300;
+  }
+
+  /* Gradient text */
+  .grad-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #D1AAB2 0%, #A9697B 50%, #7A2D68 100%);
+  }
+  .grad-text-2 {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #D1AAB2, #A9697B);
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 rounded-[10px] font-medium text-t1
+           bg-grad-brand border border-rose-light/20 transition-all duration-200
+           hover:shadow-glow-lg hover:-translate-y-0.5 cursor-pointer;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-6 py-3 rounded-[10px] font-medium text-t2
+           bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl transition-all duration-200
+           hover:text-t1 hover:border-white/[0.14] hover:-translate-y-0.5;
+  }
+  .btn-ghost {
+    @apply px-4 py-2 rounded-lg text-sm font-medium text-t3 transition-colors duration-200
+           hover:text-t1 cursor-pointer bg-transparent border-none;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium
+           text-rose-light bg-plum/15 border border-plum/30;
+  }
+
+  /* Section wrapper */
+  .section-wrap {
+    @apply max-w-[1200px] mx-auto px-4 sm:px-6;
+  }
 }
 
-section[id] {
-  scroll-margin-top: 100px;
-}
-
-body {
-  background-color: #050505;
-  color: #f8fafc;
-  font-family: 'Inter', sans-serif;
-  background-image: radial-gradient(#1e1b4b 0.5px, transparent 0.5px);
-  background-size: 40px 40px;
-}
-
-.nexus-card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-}
-
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #050505; }
-::-webkit-scrollbar-thumb { 
-  background: #22c55e; 
-  border-radius: 10px; 
-  border: 2px solid #050505;
-}
-
-/* Esconde o painel de debug do Next.js no canto da tela */
-nextjs-portal {
-  display: none !important;
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }
