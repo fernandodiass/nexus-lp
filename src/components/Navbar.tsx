@@ -1,13 +1,13 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const NAV_ITEMS = [
-  { label: 'Início',   id: 'hero' },
+  { label: 'Home',   id: 'hero' },
   { label: 'Features', id: 'features' },
-  { label: 'Produto',  id: 'product' },
+  { label: 'Product',  id: 'product' },
   { label: 'Pricing',  id: 'pricing' },
   { label: 'FAQ',      id: 'faq' },
-  { label: 'Contato',  id: 'footer' },
+  { label: 'Contact',  id: 'footer' },
 ];
 
 function scrollToId(id: string) {
