@@ -132,10 +132,37 @@ export default function Hero() {
         {/* Dashboard preview */}
         <div className="relative w-full max-w-[960px] -mb-24 sm:-mb-28">
           {/* Glow */}
-          <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[65%] h-[180px] pointer-events-none"
-            style={{background:'radial-gradient(ellipse,rgba(122,45,104,.3) 0%,rgba(72,64,141,.15) 50%,transparent 70%)',filter:'blur(40px)'}}/>
+          <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[65%] h-[180px] pointer-events-none z-0"
+            style={{background:'radial-gradient(ellipse,rgba(122,45,104,.3) 0%,rgba(72,64,141,.15) 50%,transparent 70%)',filter:'blur-40px)'}}/>
 
-          {/* Frame */}
+          {/* Floating cards — Alterado para z-30 para forçar a renderização na camada superior */}
+          <div className="hidden lg:block absolute top-[15%] -left-20 animate-float z-30">
+            <div className="glass rounded-xl px-4 py-3 shadow-card">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center"
+                     style={{background:'linear-gradient(135deg,rgba(122,45,104,.3),rgba(72,64,141,.3))'}}>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M2 12L2 8M7 12V5M12 12V2" stroke="#D1AAB2" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <div className="text-[13px] font-semibold text-t1">+$142.8K</div>
+                  <div className="text-[10px] text-t3">Revenue this month</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="hidden lg:block absolute top-[38%] -right-20 animate-float2 z-30">
+            <div className="glass rounded-xl px-4 py-3 shadow-card">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]"/>
+                <span className="text-[12px] text-t2">AI Engine active</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Frame — Alterado de z-10 para z-10 explícito garantindo que os cards flutuantes fiquem acima */}
           <div className="relative z-10 rounded-2xl overflow-hidden border border-white/[0.08]
                           bg-white/[0.02] shadow-dashboard">
             {/* Window chrome */}
@@ -192,32 +219,6 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Floating cards — hidden on small screens */}
-          <div className="hidden lg:block absolute top-[15%] -left-20 animate-float">
-            <div className="glass rounded-xl px-4 py-3 shadow-card">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center"
-                     style={{background:'linear-gradient(135deg,rgba(122,45,104,.3),rgba(72,64,141,.3))'}}>
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path d="M2 12L2 8M7 12V5M12 12V2" stroke="#D1AAB2" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-[13px] font-semibold text-t1">+$142.8K</div>
-                  <div className="text-[10px] text-t3">Revenue this month</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="hidden lg:block absolute top-[38%] -right-20 animate-float2">
-            <div className="glass rounded-xl px-4 py-3 shadow-card">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]"/>
-                <span className="text-[12px] text-t2">AI Engine active</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
