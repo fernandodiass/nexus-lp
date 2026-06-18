@@ -426,7 +426,7 @@ Cada componente segue a estrutura:
 
 ## Licença
 
-MIT © 2026 Fernando Diass — [fernandodiass.com.br](https://fernandodiass.com.br)
+MIT © 2026 Fernando Dias — [fernandodiass.com.br](https://fernandodiass.com.br)
 
 ---
 
